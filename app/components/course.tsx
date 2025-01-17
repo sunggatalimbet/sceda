@@ -1,10 +1,11 @@
-import { ICourse } from "../types";
+import { ICourse, IThemesNames } from "../types";
 
 type Props = {
 	course: ICourse;
+	currentTheme: IThemesNames;
 };
 
-export const Course = ({ course }: Props) => {
+export const Course = ({ course, currentTheme }: Props) => {
 	const timeToPercentage = (time: number) => {
 		const startTime = 9; // 9:00 AM
 		const endTime = 15; // 2:00 PM
@@ -18,7 +19,7 @@ export const Course = ({ course }: Props) => {
 		return ((endTime - startTime) / totalHours) * 100;
 	};
 
-	const bgColor = identifyBackgroundColor(course.id);
+	const bgColor = identifyBackgroundColor(course.id, currentTheme);
 
 	const startPercentage = timeToPercentage(
 		course.time.start.hh + course.time.start.mm / 60,
@@ -58,16 +59,44 @@ export const Course = ({ course }: Props) => {
 	);
 };
 
-const identifyBackgroundColor = (courseId: string) => {
-	switch (courseId) {
-		case "FMAT041":
-			return "bg-[#EB5D65]";
-		case "FLDP095":
-			return "bg-[#31A8E0]";
-		case "FEAP020":
-			return "bg-[#27C253]";
-		default:
-			return "bg-[#404040]";
+const identifyBackgroundColor = (
+	courseId: string,
+	currentTheme: IThemesNames,
+) => {
+	switch (currentTheme) {
+		case "halloween":
+			switch (courseId) {
+				case "FMAT041":
+					return "bg-[#7C7C7C]";
+				case "FLDP095":
+					return "bg-[#000000]";
+				case "FEAP020":
+					return "bg-[#404040]";
+				default:
+					return "bg-[#404040]";
+			}
+		case "hello kitty":
+			switch (courseId) {
+				case "FMAT041":
+					return "bg-[#B701FF]";
+				case "FLDP095":
+					return "bg-[#EF23BF]";
+				case "FEAP020":
+					return "bg-[#E80E64]";
+				default:
+					return "bg-[#404040]";
+			}
+		default: // default theme
+			switch (courseId) {
+				case "FMAT041":
+					return "bg-[#EB5D65]";
+				case "FLDP095":
+					return "bg-[#31A8E0]";
+				case "FEAP020":
+					return "bg-[#27C253]";
+				default:
+					return "bg-[#404040]";
+			}
 	}
 };
 

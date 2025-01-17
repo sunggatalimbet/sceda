@@ -21,3 +21,5 @@ export interface IEnd {
 	hh: number;
 	mm: number;
 }
+
+export type IThemesNames = "default" | "halloween" | "hello kitty";

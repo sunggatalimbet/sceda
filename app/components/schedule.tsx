@@ -1,12 +1,13 @@
-import { ICourse } from "../types";
+import { ICourse, IThemesNames } from "../types";
 import { Course } from "./course";
 import Image from "next/image";
 
 type Props = {
 	courses: ICourse[][] | null;
+	currentTheme: IThemesNames;
 };
 
-export const Schedule = ({ courses }: Props) => {
+export const Schedule = ({ courses, currentTheme }: Props) => {
 	const hours = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00"];
 
 	return (
@@ -40,7 +41,11 @@ export const Schedule = ({ courses }: Props) => {
 									style={{ height: "60px" }}
 								>
 									{day.map((course, i) => (
-										<Course key={i} course={course} />
+										<Course
+											key={i}
+											course={course}
+											currentTheme={currentTheme}
+										/>
 									))}
 								</div>
 							</div>

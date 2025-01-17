@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Schedule } from "./components/schedule";
 import { ButtonGroup } from "./components/button-group";
 import { useGetSchedule } from "./hooks/useGetSchedule";
 import { AuthForm, AuthSchema } from "./components/auth-form";
+import { IThemesNames } from "./types";
 
 export default function Home() {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const [currentTheme, setCurrentTheme] = useState<IThemesNames>("default");
 	const pageRef = useRef<HTMLDivElement>(null);
 	const buttonGroupRef = useRef<HTMLDivElement>(null);
 
@@ -19,18 +21,14 @@ export default function Home() {
 		error,
 	} = useGetSchedule();
 
-	useEffect(() => {
-		console.log(isError, error);
-	}, [isError, error]);
-
 	const onSubmit = (data: AuthSchema) => {
 		getSchedule({ username: data.username, password: data.password });
 		setIsAuthenticated(true);
 	};
 
 	if (isLoading) return <>Here should be loading state...</>;
-	if (isError) return <>Sorry. Unexpected error happened.</>;
-	// if (!data) return <>We received incorrect data</>;
+	if (isError)
+		return <>Sorry. Unexpected error happened. {JSON.stringify(error)}</>;
 
 	return (
 		<main className="w-full">
@@ -47,8 +45,9 @@ export default function Home() {
 					<ButtonGroup
 						pageRef={pageRef}
 						buttonGroupRef={buttonGroupRef}
+						setCurrentTheme={setCurrentTheme}
 					/>
-					<Schedule courses={data} />
+					<Schedule courses={data} currentTheme={currentTheme} />
 				</div>
 			)}
 
