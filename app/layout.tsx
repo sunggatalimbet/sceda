@@ -1,4 +1,5 @@
 import { Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import { ReactQueryProvider } from "./components/query-provider";
 import type { Metadata } from "next";
 import "./globals.css";
@@ -22,6 +23,7 @@ export default function RootLayout({
 					className={`min-h-screen flex items-end justify-center mx-auto max-w-[393px] antialiased ${inter.className}`}
 				>
 					{children}
+					<Analytics />
 				</body>
 			</html>
 		</ReactQueryProvider>

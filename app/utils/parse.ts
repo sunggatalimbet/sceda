@@ -54,7 +54,7 @@ export const parseDay = (input: string): ICourse => {
 	const classEndTime = timeMatch[2];
 	const classCabinet = cabinetMatch ? cabinetMatch[1] : "";
 
-	// Format to match your UserScheduleItem interface
+	// Format to match UserScheduleItem interface
 	const parsedCourse = {
 		label: className,
 		title: `${classStartTime}-${classEndTime}`,
