@@ -48,6 +48,7 @@ export default function Home() {
 						pageRef={pageRef}
 						buttonGroupRef={buttonGroupRef}
 						setCurrentTheme={setCurrentTheme}
+						currentTheme={currentTheme}
 					/>
 					<Schedule courses={data} currentTheme={currentTheme} />
 				</div>
