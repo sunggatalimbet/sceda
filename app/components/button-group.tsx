@@ -1,10 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { ArrowDownToLineIcon, PaletteIcon } from "lucide-react";
 import { handleDownload } from "../utils/download";
-import type { RefObject } from "react";
-import { useState } from "react";
 import { IThemesNames } from "../types";
+import type { RefObject } from "react";
 
 type Props = {
 	pageRef: RefObject<HTMLDivElement | null>;

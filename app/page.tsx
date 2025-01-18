@@ -1,12 +1,14 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useGetSchedule } from "./hooks/useGetSchedule";
+
 import { Schedule } from "./components/schedule";
 import { ButtonGroup } from "./components/button-group";
-import { useGetSchedule } from "./hooks/useGetSchedule";
-import { AuthForm, AuthSchema } from "./components/auth-form";
-import { IThemesNames } from "./types";
+import { AuthForm, type AuthSchema } from "./components/auth-form";
 import { LoadingSpinner } from "./components/loading-skeleton";
+import { ErrorMessage } from "./components/error-message";
+import type { IThemesNames } from "./types";
 
 export default function Home() {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -28,8 +30,7 @@ export default function Home() {
 	};
 
 	if (isLoading) return <LoadingSpinner />;
-	if (isError)
-		return <>Sorry. Unexpected error happened. {JSON.stringify(error)}</>;
+	if (isError) return <ErrorMessage error={error} />;
 
 	return (
 		<main className="w-full">

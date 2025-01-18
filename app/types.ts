@@ -23,3 +23,9 @@ export interface IEnd {
 }
 
 export type IThemesNames = "default" | "halloween" | "hello kitty";
+
+export interface ApiError {
+	message: string;
+	code?: string;
+	status?: number;
+}
