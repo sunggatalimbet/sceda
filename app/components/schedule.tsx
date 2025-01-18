@@ -1,6 +1,5 @@
 import { ICourse, IThemesNames } from "../types";
 import { Course } from "./course";
-import Image from "next/image";
 
 type Props = {
 	courses: ICourse[][] | null;
@@ -8,49 +7,51 @@ type Props = {
 };
 
 export const Schedule = ({ courses, currentTheme }: Props) => {
-	const hours = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00"];
+	const hours = ["09", "10", "11", "12", "13", "14", "15", "16", "17"];
+	const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 
 	return (
-		<div className="w-full">
-			<div className="w-full flex text-[#B1B1B1] text-[12px] font-semibold mb-2">
-				{hours.map((hour, i) => (
-					<div key={hour} className="w-1/6 flex gap-1 items-center">
-						{i > 0 && (
-							<Image
-								src={"/hour-divider.svg"}
-								alt="|"
-								width={2}
-								height={20}
-							/>
-						)}
-						<span>{hour}</span>
+		<div>
+			<div className="pl-[23px] flex text-center  gap-2 h-full relative">
+				{days.map((day) => (
+					<div
+						key={day}
+						className="w-[58px] mb-1 text-[#B1B1B1] text-[10px] font-semibold"
+					>
+						{day}
 					</div>
 				))}
 			</div>
+			<div className="flex flex-row">
+				<div className="h-[393px] flex flex-col justify-between text-[#B1B1B1] text-[10px] font-semibold w-6">
+					{hours.map((hour) => (
+						<div key={hour} className="flex flex-col items-center">
+							<span>{hour === "17" ? "" : hour}</span>
+						</div>
+					))}
+				</div>
 
-			<div className="space-y-4">
-				{courses?.map(
-					(day, dayIndex) =>
-						day.length > 0 && (
-							<div
-								key={dayIndex}
-								className="rounded-[10px] border-2 border-dashed border-[#E1E1E1]"
-							>
+				<div className="flex flex-row gap-2 w-full">
+					{courses?.map(
+						(day, dayIndex) =>
+							day.length > 0 && (
 								<div
-									className="grid grid-cols-6 gap-2 h-full relative"
-									style={{ height: "60px" }}
+									key={dayIndex}
+									className="w-1/5 h-[393px] rounded-[10px] border-2 border-dashed border-[#E1E1E1]"
 								>
-									{day.map((course, i) => (
-										<Course
-											key={i}
-											course={course}
-											currentTheme={currentTheme}
-										/>
-									))}
+									<div className="grid grid-rows-6 gap-2 h-full relative">
+										{day.map((course, i) => (
+											<Course
+												key={i}
+												course={course}
+												currentTheme={currentTheme}
+											/>
+										))}
+									</div>
 								</div>
-							</div>
-						),
-				)}
+							),
+					)}
+				</div>
 			</div>
 		</div>
 	);

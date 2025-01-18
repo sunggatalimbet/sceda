@@ -42,7 +42,7 @@ export const ButtonGroup = ({
 				<PaletteIcon size={16} />
 			</button>
 			{isDropdownOpen && (
-				<div className="absolute shadow-lg rounded-lg z-10 text-white mt-10 bg-[#4F46E5] list-none">
+				<div className="absolute shadow-lg rounded-lg z-10 text-xs font-semibold text-white mt-10 bg-[#4F46E5] list-none">
 					<li
 						className="px-4 cursor-pointer py-2 rounded-lg hover:bg-[#342dbc] transition-colors"
 						onClick={() => onChangeCurrentTheme("default")}

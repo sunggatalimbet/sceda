@@ -20,5 +20,8 @@ export const useGetSchedule = () => {
 
 			return data.schedule as ICourse[][];
 		},
+		onError: (error) => {
+			console.error("Error fetching schedule:", error);
+		},
 	});
 };

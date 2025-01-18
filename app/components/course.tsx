@@ -8,36 +8,33 @@ type Props = {
 export const Course = ({ course, currentTheme }: Props) => {
 	const timeToPercentage = (time: number) => {
 		const startTime = 9; // 9:00 AM
-		const endTime = 15; // 2:00 PM
+		const endTime = 17; // 5:00 PM
 		const totalHours = endTime - startTime;
-		console.log(((time - startTime) / totalHours) * 100);
 		return ((time - startTime) / totalHours) * 100;
 	};
 
 	const getDurationPercentage = (startTime: number, endTime: number) => {
-		const totalHours = 15 - 9; // 5 hours total
+		const totalHours = 17 - 9; // 8 hours total
 		return ((endTime - startTime) / totalHours) * 100;
 	};
 
 	const bgColor = identifyBackgroundColor(course.id, currentTheme);
 
-	const startPercentage = timeToPercentage(
+	const topPercentage = timeToPercentage(
 		course.time.start.hh + course.time.start.mm / 60,
 	);
-	const width = getDurationPercentage(
+	const height = getDurationPercentage(
 		course.time.start.hh + course.time.start.mm / 60,
 		course.time.end.hh + course.time.end.mm / 60,
 	);
 
 	return (
 		<div
-			className={`w-full absolute rounded-lg p-2 text-white ${bgColor}`}
+			className={`absolute w-full rounded-lg p-2 text-white ${bgColor}`}
 			style={{
-				left: `${startPercentage}%`,
-				width: `${width}%`,
-				height: "100%",
-				top: 0,
-				bottom: 0,
+				top: `${topPercentage}%`,
+				height: `${height}%`,
+				left: 0,
 			}}
 		>
 			<div className="flex flex-col justify-between items-start gap-1 h-full">
@@ -45,14 +42,9 @@ export const Course = ({ course, currentTheme }: Props) => {
 					<div className="text-[12px] leading-[15px] font-semibold">
 						{convertCourseIdToName(course.id)}
 					</div>
-					<div className="text-[8px] leading-[10px] opacity-90 font-extrabold ">
+					<div className="text-[8px] leading-[10px] opacity-90 font-extrabold">
 						{course.cab}
 					</div>
-				</div>
-
-				<div className="flex flex-col text-[6px] leading-[7px] font-semibold">
-					<span>{course.title.split("-")[0]}</span>
-					<span>{course.title.split("-")[1]}</span>
 				</div>
 			</div>
 		</div>

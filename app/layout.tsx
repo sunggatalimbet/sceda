@@ -19,7 +19,7 @@ export default function RootLayout({
 		<ReactQueryProvider>
 			<html lang="en">
 				<body
-					className={`min-h-screen flex items-end justify-center mx-auto max-w-[393px] ${inter.className}`}
+					className={`min-h-screen flex items-end justify-center mx-auto max-w-[393px] antialiased ${inter.className}`}
 				>
 					{children}
 				</body>

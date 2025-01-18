@@ -6,6 +6,7 @@ import { ButtonGroup } from "./components/button-group";
 import { useGetSchedule } from "./hooks/useGetSchedule";
 import { AuthForm, AuthSchema } from "./components/auth-form";
 import { IThemesNames } from "./types";
+import { LoadingSpinner } from "./components/loading-skeleton";
 
 export default function Home() {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -26,7 +27,7 @@ export default function Home() {
 		setIsAuthenticated(true);
 	};
 
-	if (isLoading) return <>Here should be loading state...</>;
+	if (isLoading) return <LoadingSpinner />;
 	if (isError)
 		return <>Sorry. Unexpected error happened. {JSON.stringify(error)}</>;
 
