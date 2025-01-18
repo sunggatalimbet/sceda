@@ -32,7 +32,7 @@ export const handleDownload = async ({ pageRef, buttonGroupRef }: Params) => {
 		console.error("Error capturing page as image:", error);
 	} finally {
 		if (buttonGroupRef.current) {
-			buttonGroupRef.current.style.display = "flex";
+			buttonGroupRef.current.style.display = "block";
 		}
 	}
 };

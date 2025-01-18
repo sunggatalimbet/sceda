@@ -1,4 +1,6 @@
 import { ICourse, IThemesNames } from "../types";
+import { useState } from "react";
+import { CourseModal } from "./course-modal";
 
 type Props = {
 	course: ICourse;
@@ -6,6 +8,8 @@ type Props = {
 };
 
 export const Course = ({ course, currentTheme }: Props) => {
+	const [isModalOpen, setIsModalOpen] = useState(false);
+
 	const timeToPercentage = (time: number) => {
 		const startTime = 9; // 9:00 AM
 		const endTime = 17; // 5:00 PM
@@ -29,25 +33,34 @@ export const Course = ({ course, currentTheme }: Props) => {
 	);
 
 	return (
-		<div
-			className={`absolute w-full rounded-lg p-2 text-white ${bgColor}`}
-			style={{
-				top: `${topPercentage}%`,
-				height: `${height}%`,
-				left: 0,
-			}}
-		>
-			<div className="flex flex-col justify-between items-start gap-1 h-full">
-				<div>
-					<div className="text-[12px] leading-[15px] font-semibold">
-						{convertCourseIdToName(course.id)}
-					</div>
-					<div className="text-[8px] leading-[10px] opacity-90 font-extrabold">
-						{course.cab}
+		<>
+			<div
+				className={`absolute w-full rounded-lg p-2 text-white ${bgColor} cursor-pointer hover:brightness-110 transition-all`}
+				style={{
+					top: `${topPercentage}%`,
+					height: `${height}%`,
+					left: 0,
+				}}
+				onClick={() => setIsModalOpen(true)}
+			>
+				<div className="flex flex-col justify-between items-start gap-1 h-full">
+					<div>
+						<div className="text-[12px] leading-[15px] font-semibold">
+							{convertCourseIdToName(course.id, course)}
+						</div>
+						<div className="text-[8px] leading-[10px] opacity-90 font-extrabold">
+							{course.cab}
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+
+			<CourseModal
+				course={course}
+				isOpen={isModalOpen}
+				onClose={() => setIsModalOpen(false)}
+			/>
+		</>
 	);
 };
 
@@ -78,6 +91,61 @@ const identifyBackgroundColor = (
 				default:
 					return "bg-[#404040]";
 			}
+		case "ocean":
+			switch (courseId) {
+				case "FMAT041":
+					return "bg-[#003459]"; // Dark Ocean Blue
+				case "FLDP095":
+					return "bg-[#007EA7]"; // Medium Ocean Blue
+				case "FEAP020":
+					return "bg-[#2695BF]"; // Light Ocean Blue
+				default:
+					return "bg-[#00171F]"; // Deep Ocean Black
+			}
+		case "forest":
+			switch (courseId) {
+				case "FMAT041":
+					return "bg-[#2D6A4F]"; // Dark Forest Green
+				case "FLDP095":
+					return "bg-[#40916C]"; // Medium Forest Green
+				case "FEAP020":
+					return "bg-[#52B788]"; // Light Forest Green
+				default:
+					return "bg-[#74C69D]";
+			}
+		case "sunset":
+			switch (courseId) {
+				case "FMAT041":
+					return "bg-[#E85D04]"; // Bright Orange
+				case "FLDP095":
+					return "bg-[#DC2F02]"; // Deep Red
+				case "FEAP020":
+					return "bg-[#F48C06]"; // Golden Yellow
+				default:
+					return "bg-[#FAA307]";
+			}
+		case "cyberpunk":
+			switch (courseId) {
+				case "FMAT041":
+					return "bg-[#FF0080]"; // Neon Pink
+				case "FLDP095":
+					return "bg-[#7B2CBF]"; // Electric Purple
+				case "FEAP020":
+					return "bg-[#08C189]"; // Neon Turquoise
+				default:
+					return "bg-[#3A0CA3]";
+			}
+		case "pastel":
+			switch (courseId) {
+				case "FMAT041":
+					return "bg-[#E57FB3]"; // Deeper Pastel Pink
+				case "FLDP095":
+					return "bg-[#E8A87C]"; // Deeper Pastel Peach
+				case "FEAP020":
+					return "bg-[#FF8B8B]"; // Deeper Pastel Rose
+				default:
+					return "bg-[#E8C4A4]"; // Deeper Pastel Beige
+			}
 		default: // default theme
 			switch (courseId) {
 				case "FMAT041":
@@ -92,12 +160,17 @@ const identifyBackgroundColor = (
 	}
 };
 
-const convertCourseIdToName = (courseId: string) => {
+const convertCourseIdToName = (courseId: string, course?: ICourse) => {
 	switch (courseId) {
 		case "FMAT041":
 			return "Math";
-		case "FLDP095":
-			return "LS";
+		case "FLDP095": {
+			if (!course) return "LS";
+			const durationInMinutes =
+				(course.time.end.hh * 60 + course.time.end.mm) -
+				(course.time.start.hh * 60 + course.time.start.mm);
+			return durationInMinutes <= 50 ? "LS.S" : "LS.L";
+		}
 		case "FEAP020":
 			return "EAP";
 		default:

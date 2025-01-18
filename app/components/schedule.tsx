@@ -37,7 +37,7 @@ export const Schedule = ({ courses, currentTheme }: Props) => {
 							day.length > 0 && (
 								<div
 									key={dayIndex}
-									className="w-1/5 h-[393px] rounded-[10px] border-2 border-dashed border-[#E1E1E1]"
+									className="w-1/5 h-[393px] rounded-[10px] border border-[#dddddd]"
 								>
 									<div className="grid grid-rows-6 gap-2 h-full relative">
 										{day.map((course, i) => (

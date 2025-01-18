@@ -22,7 +22,7 @@ export interface IEnd {
 	mm: number;
 }
 
-export type IThemesNames = "default" | "halloween" | "hello kitty";
+export type IThemesNames = "default" | "halloween" | "hello kitty" | "ocean" | "forest" | "sunset" | "cyberpunk" | "pastel";
 
 export interface ApiError {
 	message: string;
