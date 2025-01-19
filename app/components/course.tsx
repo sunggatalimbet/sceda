@@ -46,7 +46,7 @@ export const Course = ({ course, currentTheme }: Props) => {
 				<div className="flex flex-col justify-between items-start gap-1 h-full">
 					<div>
 						<div className="text-[12px] leading-[15px] font-semibold">
-							{convertCourseIdToName(course.courseId, course)}
+							{convertCourseIdToName(course)}
 						</div>
 						<div className="text-[8px] leading-[10px] opacity-90 font-extrabold">
 							{course.courseClassroom}
@@ -160,17 +160,21 @@ const identifyBackgroundColor = (
 	}
 };
 
-const convertCourseIdToName = (courseId: string | null, course?: ICourse) => {
+const convertCourseIdToName = (course: ICourse) => {
+	const { courseId, courseType } = course;
 	switch (courseId) {
 		case "FMAT 041":
-			return "Math";
+			return courseType === "Lecture"
+				? "M.L"
+				: courseType === "Seminar"
+				? "M.S"
+				: "M";
 		case "FLDP 095": {
-			if (!course) return "LS";
-			const durationInMinutes =
-				course.time.end.hh * 60 +
-				course.time.end.mm -
-				(course.time.start.hh * 60 + course.time.start.mm);
-			return durationInMinutes <= 50 ? "LS.S" : "LS.L";
+			return courseType === "Lecture"
+				? "LS.L"
+				: courseType === "Seminar"
+				? "LS.S"
+				: "LS";
 		}
 		case "FEAP 020":
 			return "EAP";

@@ -9,6 +9,7 @@ import { AuthForm, type AuthSchema } from "./components/auth-form";
 import { LoadingSpinner } from "./components/loading-skeleton";
 import { ErrorMessage } from "./components/error-message";
 import type { IThemesNames } from "./types";
+import { Legends } from "./components/legends";
 
 export default function Home() {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -51,6 +52,7 @@ export default function Home() {
 						currentTheme={currentTheme}
 					/>
 					<Schedule courses={data} currentTheme={currentTheme} />
+					<Legends />
 				</div>
 			)}
 
