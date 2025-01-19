@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
 	title: "Sceda - schedule under your fingertips",
-	description: "CHOTAM",
+	description: "Transform your class schedule into a beautiful wallpaper with just a few clicks",
 };
 
 export default function RootLayout({
