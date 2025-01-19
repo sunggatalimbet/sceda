@@ -5,7 +5,8 @@ export class ApiError extends Error {
 			| "INVALID_CREDENTIALS"
 			| "SERVER_ERROR"
 			| "NETWORK_ERROR"
-			| "PARSE_ERROR",
+			| "PARSE_ERROR"
+			| "INVALID_ACCESS",
 		public status: number,
 	) {
 		super(message);
@@ -18,4 +19,5 @@ export const errorCodes = {
 	SERVER_ERROR: "SERVER_ERROR",
 	NETWORK_ERROR: "NETWORK_ERROR",
 	PARSE_ERROR: "PARSE_ERROR",
+	INVALID_ACCESS: "INVALID_ACCESS",
 } as const;
