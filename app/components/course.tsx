@@ -22,7 +22,7 @@ export const Course = ({ course, currentTheme }: Props) => {
 		return ((endTime - startTime) / totalHours) * 100;
 	};
 
-	const bgColor = identifyBackgroundColor(course.id, currentTheme);
+	const bgColor = identifyBackgroundColor(course.courseId, currentTheme);
 
 	const topPercentage = timeToPercentage(
 		course.time.start.hh + course.time.start.mm / 60,
@@ -46,10 +46,10 @@ export const Course = ({ course, currentTheme }: Props) => {
 				<div className="flex flex-col justify-between items-start gap-1 h-full">
 					<div>
 						<div className="text-[12px] leading-[15px] font-semibold">
-							{convertCourseIdToName(course.id, course)}
+							{convertCourseIdToName(course.courseId, course)}
 						</div>
 						<div className="text-[8px] leading-[10px] opacity-90 font-extrabold">
-							{course.cab}
+							{course.courseClassroom}
 						</div>
 					</div>
 				</div>
@@ -65,94 +65,94 @@ export const Course = ({ course, currentTheme }: Props) => {
 };
 
 const identifyBackgroundColor = (
-	courseId: string,
+	courseId: string | null,
 	currentTheme: IThemesNames,
 ) => {
 	switch (currentTheme) {
 		case "halloween":
 			switch (courseId) {
-				case "FMAT041":
+				case "FMAT 041":
 					return "bg-[#7C7C7C]";
-				case "FLDP095":
+				case "FLDP 095":
 					return "bg-[#000000]";
-				case "FEAP020":
+				case "FEAP 020":
 					return "bg-[#404040]";
 				default:
 					return "bg-[#404040]";
 			}
 		case "hello kitty":
 			switch (courseId) {
-				case "FMAT041":
+				case "FMAT 041":
 					return "bg-[#B701FF]";
-				case "FLDP095":
+				case "FLDP 095":
 					return "bg-[#EF23BF]";
-				case "FEAP020":
+				case "FEAP 020":
 					return "bg-[#E80E64]";
 				default:
 					return "bg-[#404040]";
 			}
 		case "ocean":
 			switch (courseId) {
-				case "FMAT041":
+				case "FMAT 041":
 					return "bg-[#003459]"; // Dark Ocean Blue
-				case "FLDP095":
+				case "FLDP 095":
 					return "bg-[#007EA7]"; // Medium Ocean Blue
-				case "FEAP020":
+				case "FEAP 020":
 					return "bg-[#2695BF]"; // Light Ocean Blue
 				default:
 					return "bg-[#00171F]"; // Deep Ocean Black
 			}
 		case "forest":
 			switch (courseId) {
-				case "FMAT041":
+				case "FMAT 041":
 					return "bg-[#2D6A4F]"; // Dark Forest Green
-				case "FLDP095":
+				case "FLDP 095":
 					return "bg-[#40916C]"; // Medium Forest Green
-				case "FEAP020":
+				case "FEAP 020":
 					return "bg-[#52B788]"; // Light Forest Green
 				default:
 					return "bg-[#74C69D]";
 			}
 		case "sunset":
 			switch (courseId) {
-				case "FMAT041":
+				case "FMAT 041":
 					return "bg-[#E85D04]"; // Bright Orange
-				case "FLDP095":
+				case "FLDP 095":
 					return "bg-[#DC2F02]"; // Deep Red
-				case "FEAP020":
+				case "FEAP 020":
 					return "bg-[#F48C06]"; // Golden Yellow
 				default:
 					return "bg-[#FAA307]";
 			}
 		case "cyberpunk":
 			switch (courseId) {
-				case "FMAT041":
+				case "FMAT 041":
 					return "bg-[#FF0080]"; // Neon Pink
-				case "FLDP095":
+				case "FLDP 095":
 					return "bg-[#7B2CBF]"; // Electric Purple
-				case "FEAP020":
+				case "FEAP 020":
 					return "bg-[#08C189]"; // Neon Turquoise
 				default:
 					return "bg-[#3A0CA3]";
 			}
 		case "pastel":
 			switch (courseId) {
-				case "FMAT041":
+				case "FMAT 041":
 					return "bg-[#E57FB3]"; // Deeper Pastel Pink
-				case "FLDP095":
+				case "FLDP 095":
 					return "bg-[#E8A87C]"; // Deeper Pastel Peach
-				case "FEAP020":
+				case "FEAP 020":
 					return "bg-[#FF8B8B]"; // Deeper Pastel Rose
 				default:
 					return "bg-[#E8C4A4]"; // Deeper Pastel Beige
 			}
 		default: // default theme
 			switch (courseId) {
-				case "FMAT041":
+				case "FMAT 041":
 					return "bg-[#EB5D65]";
-				case "FLDP095":
+				case "FLDP 095":
 					return "bg-[#31A8E0]";
-				case "FEAP020":
+				case "FEAP 020":
 					return "bg-[#27C253]";
 				default:
 					return "bg-[#404040]";
@@ -160,18 +160,19 @@ const identifyBackgroundColor = (
 	}
 };
 
-const convertCourseIdToName = (courseId: string, course?: ICourse) => {
+const convertCourseIdToName = (courseId: string | null, course?: ICourse) => {
 	switch (courseId) {
-		case "FMAT041":
+		case "FMAT 041":
 			return "Math";
-		case "FLDP095": {
+		case "FLDP 095": {
 			if (!course) return "LS";
 			const durationInMinutes =
-				(course.time.end.hh * 60 + course.time.end.mm) -
+				course.time.end.hh * 60 +
+				course.time.end.mm -
 				(course.time.start.hh * 60 + course.time.start.mm);
 			return durationInMinutes <= 50 ? "LS.S" : "LS.L";
 		}
-		case "FEAP020":
+		case "FEAP 020":
 			return "EAP";
 		default:
 			return "Unknown";

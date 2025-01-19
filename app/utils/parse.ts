@@ -21,60 +21,83 @@ const WEEKDAYS = [
 	"SUNDAY",
 ] as const;
 
-export const parseDay = (input: string): ICourse => {
-	if (!input) {
+const patterns = {
+	courseName: /<span style="font-weight:bold;">([^<]+)<\/span>/,
+	courseTimeSlot: /\((\d{2}:\d{2})-(\d{2}:\d{2})\)/,
+	courseType: /(Seminar|Lecture)\s\d+/,
+	courseId: /^([A-Z]{4}\s\d{3})/,
+	courseClassroom: /(?<=<br>)([A-Za-z0-9]+\.[A-Za-z0-9]+)(?=<br>)/,
+	courseTutors: /ECTS credit<br>([^<]+)<br>[A-Za-z0-9]+\.[A-Za-z0-9]+<br>/, // New pattern for tutors
+};
+
+function cleanInput(input: string) {
+	return input
+		.replace(/\+\s*$/gm, "") // Remove + at the end of lines
+		.replace(/^\s*'/gm, "") // Remove starting single quotes
+		.replace(/'\s*$/gm, "") // Remove ending single quotes
+		.replace(/\n\s*/g, " ") // Replace newlines with a space
+		.trim(); // Trim leading/trailing whitespace
+}
+
+export const parseTime = (str: string) => {
+	const [hh, mm] = str.split(":");
+	return {
+		hh: hh.padStart(2, "0"), // Ensures two digits for hours
+		mm: mm.padStart(2, "0"), // Ensures two digits for minutes
+	};
+};
+
+export const parseDay = (rawInput: string): ICourse => {
+	if (!rawInput) {
 		throw new Error("Empty slot");
 	}
 
-	function cleanInput(input: string) {
-		return input
-			.replace(/\+\s*$/gm, "") // Remove + at the end of lines
-			.replace(/^\s*'/gm, "") // Remove starting single quotes
-			.replace(/'\s*$/gm, "") // Remove ending single quotes
-			.replace(/\n\s*/g, " ") // Replace newlines with a space
-			.trim(); // Trim leading/trailing whitespace
-	}
-	const cleanedInput = cleanInput(input);
-	// Updated regex patterns
-	const classNameRegex = /<span style="font-weight:bold;">(.*?)<\/span>/;
-	const timeRegex = /\((\d{2}:\d{2})-(\d{2}:\d{2})\)/;
-	const cabinetRegex = /(\d+\.\d+)<br><i/;
+	const input = cleanInput(rawInput);
 
-	// Extract data using the patterns
-	const classNameMatch = cleanedInput.match(classNameRegex);
-	const timeMatch = cleanedInput.match(timeRegex);
-	const cabinetMatch = cleanedInput.match(cabinetRegex);
+	const courseNameMatch = input.match(patterns.courseName);
+	const courseTimeMatch = input.match(patterns.courseTimeSlot);
+	const courseTypeMatch = input.match(patterns.courseType);
+	const courseClassroomMatch = input.match(patterns.courseClassroom);
+	const courseTutorsMatch = input.match(patterns.courseTutors);
 
-	if (!classNameMatch || !timeMatch) {
+	if (!courseNameMatch || !courseTimeMatch) {
 		throw new Error("Invalid course format");
 	}
 
-	const className = classNameMatch[1].trim();
-	const classStartTime = timeMatch[1];
-	const classEndTime = timeMatch[2];
-	const classCabinet = cabinetMatch ? cabinetMatch[1] : "";
+	const courseName = courseNameMatch ? courseNameMatch[1].trim() : null;
+	const courseTimeSlot = courseTimeMatch
+		? `${courseTimeMatch[1]}-${courseTimeMatch[2]}`
+		: null;
+	const courseType = courseTypeMatch ? courseTypeMatch[1] : null;
 
-	// Format to match UserScheduleItem interface
+	const courseIdMatch = courseName
+		? courseName.match(patterns.courseId)
+		: null;
+	const courseId = courseIdMatch ? courseIdMatch[1] : null;
+	const courseClassroom = courseClassroomMatch
+		? courseClassroomMatch[1]
+		: null;
+	const courseTutors = courseTutorsMatch ? courseTutorsMatch[1].trim() : null;
+
 	const parsedCourse = {
-		label: className,
-		title: `${classStartTime}-${classEndTime}`,
-		info: "0 ECTS credit",
-		teacher: input.split("<br>")[3]?.trim() || "",
-		cab: classCabinet,
-		id: className.split(" ")[0] + className.split(" ")[1],
+		courseName: courseName,
+		courseTimeSlot: courseTimeSlot,
+		courseType: courseType,
+		courseId: courseId,
+		courseClassroom: courseClassroom,
+		courseTutors: courseTutors,
 		time: {
 			start: {
-				hh: parseInt(classStartTime.split(":")[0], 10),
-				mm: parseInt(classStartTime.split(":")[1], 10),
+				hh: parseInt(courseTimeMatch[1].split(":")[0], 10),
+				mm: parseInt(courseTimeMatch[1].split(":")[1], 10),
 			},
 			end: {
-				hh: parseInt(classEndTime.split(":")[0], 10),
-				mm: parseInt(classEndTime.split(":")[1], 10),
+				hh: parseInt(courseTimeMatch[2].split(":")[0], 10),
+				mm: parseInt(courseTimeMatch[2].split(":")[1], 10),
 			},
 		},
 	};
 
-	console.log(parsedCourse);
 	return parsedCourse;
 };
 
@@ -91,8 +114,8 @@ export const parseSchedule = (json: string) => {
 
 					if (
 						week[i]
-							?.map((x) => `${x.id}${x.title}`)
-							.includes(`${item.id}${item.title}`)
+							?.map((x) => `${x.courseId}${x.courseName}`)
+							.includes(`${item.courseId}${item.courseName}`)
 					)
 						return;
 					week[i]?.push(item);
@@ -109,12 +132,4 @@ export const parseSchedule = (json: string) => {
 	});
 
 	return week;
-};
-
-export const parseTime = (str: string) => {
-	const [hh, mm] = str.split(":");
-	return {
-		hh: hh.padStart(2, "0"), // Ensures two digits for hours
-		mm: mm.padStart(2, "0"), // Ensures two digits for minutes
-	};
 };

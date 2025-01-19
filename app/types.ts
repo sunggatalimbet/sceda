@@ -1,10 +1,10 @@
 export interface ICourse {
-	label: string;
-	title: string;
-	info: string;
-	teacher: string;
-	cab: string;
-	id: string;
+	courseName: string | null;
+	courseTimeSlot: string | null;
+	courseType: string | null;
+	courseId: string | null;
+	courseClassroom: string | null;
+	courseTutors: string | null;
 	time: ITime;
 }
 export interface ITime {
@@ -22,7 +22,15 @@ export interface IEnd {
 	mm: number;
 }
 
-export type IThemesNames = "default" | "halloween" | "hello kitty" | "ocean" | "forest" | "sunset" | "cyberpunk" | "pastel";
+export type IThemesNames =
+	| "default"
+	| "halloween"
+	| "hello kitty"
+	| "ocean"
+	| "forest"
+	| "sunset"
+	| "cyberpunk"
+	| "pastel";
 
 export interface ApiError {
 	message: string;

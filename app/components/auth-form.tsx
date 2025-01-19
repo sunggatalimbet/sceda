@@ -127,7 +127,7 @@ export const AuthForm = ({
 
 				<div className="mt-8 text-center">
 					<Link
-						href="https://github.com/yourusername/sceda"
+						href="https://github.com/sunggatalimbet/sceda"
 						target="_blank"
 						rel="noopener noreferrer"
 						className="inline-flex items-center text-[#475569] hover:text-[#4F46E5] transition-colors gap-2 text-sm"
