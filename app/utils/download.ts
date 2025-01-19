@@ -18,7 +18,7 @@ export const handleDownload = async ({ pageRef, buttonGroupRef }: Params) => {
 	if (!pageRef.current || !buttonGroupRef.current) return;
 
 	try {
-		buttonGroupRef.current.style.display = "none";
+		buttonGroupRef.current.style.visibility = "hidden";
 
 		const canvas = await html2canvas(pageRef.current, {
 			logging: false,
@@ -72,7 +72,7 @@ export const handleDownload = async ({ pageRef, buttonGroupRef }: Params) => {
 		console.error("Error capturing page as image:", error);
 	} finally {
 		if (buttonGroupRef.current) {
-			buttonGroupRef.current.style.display = "block";
+			buttonGroupRef.current.style.visibility = "visible";
 		}
 	}
 };
